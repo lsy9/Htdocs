@@ -1,0 +1,156 @@
+@charset "utf-8";
+.bdr{
+	border-bottom: 2px solid #B1191A;
+	height:40px;
+	line-height: 40px; 
+}
+/*导航条设置*/
+#main .navList{
+	height: auto;
+}
+#main .navList .all~li{
+	display: none;
+}
+#main .navList .all{
+	height: 40px;
+	padding-top: 0;
+	line-height: 40px;
+}
+#main .navList .all:after{
+	content: '▽';
+}
+#main .navList .all:hover:after{
+	content: '△';
+}
+#main .navList:hover .all~li{
+	display: block;
+}
+
+/*当前位置*/
+.position span.text-lg{
+	font-size: 18px;
+}
+
+/*显示区域*/
+.show{
+	background: #FFF;
+	overflow: hidden;
+	min-height: 600px;
+	padding-top:20px;
+}
+.showLeft{
+	width:220px;
+	padding:60px 20px;
+}
+.showLeft img{
+	max-width: 200px;
+}
+.showLeft ul li{
+	float: left;
+}
+.showLeft ul li.on{
+	border:1px solid red;
+}
+.showLeft ul li img{
+	width: 40px;
+	vertical-align: text-top;
+}
+.showLeft p{
+	margin-top: 20px;
+}
+
+.showLeft p a{
+	float: right;
+	padding-left: 5px;
+}
+
+.showMain{
+	width:500px;
+	line-height: 2;
+}
+.showMain .title{
+	color:#333;
+	line-height: 1.5;
+}
+.showMain .cx{
+	color:red;
+}
+.showMain .cx a{
+	color:blue;
+	text-decoration: underline;
+}
+.showMain .info{
+	background: #EDEDED;
+	overflow: hidden;
+	padding:5px;
+}
+/*.showMain .info span{
+	display: block;
+	float: left;
+	line-height: inherit;
+}*/
+.showMain .text{
+	display: inline-block;
+	width: 60px;
+	text-align: justify;
+}
+.showMain .info .price .text-lg{
+	font-size: 150%;
+}
+.bgr{
+	background: red;
+	color: #FFF;
+	padding:0 3px;
+	margin-right: 5px;
+}
+.showMain .support{
+	border-bottom: 1px dashed #CCC;
+	padding-bottom: 10px;
+}
+.showMain .select{
+	margin-top: 10px;
+}
+.showMain .select span.text{
+	float: left;
+	line-height: 40px;
+}
+.showMain .select ul{
+	overflow: hidden;
+}
+.showMain .select li{
+	float: left;
+	border:1px solid #CCC;
+	padding:3px 5px;
+	margin:5px;
+	margin-left: 0px;
+	cursor:pointer;
+}
+.showMain .select input[type=number]{
+	width:50px;
+	height:30px;
+	text-align: center;
+}
+.showMain .select input[type=submit]{
+	background: red;
+	padding:9px 20px;
+	border:none;
+	color: #FFF;
+	font-weight: 600;
+	cursor:pointer;
+}
+/*右边*/
+.showRight{
+	width:200px;
+}
+.showRight h3{
+	height:60px;
+	text-align: center;
+	border-bottom: 1px solid #CCC;
+}
+.showRight h3 img{
+	height: 60px;
+}
+.showRight p{
+	line-height: 2;
+	text-align: center;
+}

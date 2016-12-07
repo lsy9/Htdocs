@@ -1,0 +1,142 @@
+@charset 'utf-8';
+/*用户中心导航*/
+#userNav{
+	background: #E45050;
+	height:70px;
+	line-height: 70px;
+}
+#userNav #logo{
+	line-height: normal;
+}
+#userNav #logo img{
+	display: block;
+}
+#userNav .navBar li{
+	float: left;
+	min-width: 90px;
+	text-align: center;
+}
+#userNav .navBar li a{
+	color:#FFF;
+	font-size: 16px;
+}
+
+#userNav .navBar li a span{
+	position: relative;
+	top:-10px;
+	background: #FFF;
+	padding:5px 10px;
+	color:#E45050;
+	border-radius: 50%;
+}
+
+
+#userNav .form input[type=text]{
+	width: 120px;
+	height:20px;
+	padding:5px;
+	margin-left: 30px;
+	background: #FFF;
+	border:none;
+	outline: 0;
+}
+#userNav .form input[type=submit]{
+	border:none;
+	outline: 0;
+	height:30px;
+	padding:0 10px;
+	background: #EDEDED;
+	margin-left: -5px;
+	cursor:pointer;
+}
+/*购物车*/
+#userNav .cart{
+	width:125px;
+	text-align: center;
+	background: #FFF;
+	border:1px solid #CCC;
+	height:30px;
+	line-height: 30px;
+	margin-top: 20px;
+}
+
+/*左侧设置导航*/
+#main{
+	overflow: hidden;
+	background: #EDEDED;
+}
+#main .setNav{
+	width:180px;
+	color:#000;
+	font-size: 14px;
+}
+.setNav li{
+	line-height: 25px;
+}
+
+/*右侧个人信息设置*/
+#main .setInfo{
+	width:730px;
+	background: #FFF;
+	min-height: 600px;
+	padding:15px 25px;
+	position: relative;
+}
+.setInfo .setOpt li{
+	float: left;
+	font-size: 14px;
+	margin-right: 20px;
+}
+.setInfo .setOpt li.on,.setInfo .setOpt li a.on{
+	color:#F00;
+	border-bottom: 2px solid #F00;
+}
+.setInfo .setMsg li{
+	margin:25px 0;
+}
+.setInfo .setMsg li label{
+	display: inline-block;
+	width:80px;
+	padding-right: 5px;
+	text-align: right;
+}
+.setInfo .setMsg li input[type=text]{
+	padding:5px;
+	outline: 0;
+}
+.setInfo .setMsg li ul{
+	margin-left: 80px;
+	width:390px;
+}
+.setInfo .setMsg li li{
+	float: left;
+	margin:5px;
+	border:1px solid #CCC;
+	background: #FFF;
+	padding:10px;
+}
+
+/*个人信息*/
+.setInfo .user{
+	position: absolute;
+	top:30px;
+	right: 30px;
+}
+.setInfo .user .userMsg{
+	width:260px;
+	/*height:100px;*/
+	overflow: hidden;
+	padding:5px 10px;
+	border:1px solid #CCC;
+	/*margin-top: 30px;*/
+}
+.userMsg .userpic{
+	width:100px;
+	height:100px;
+	border-radius: 50%;
+	border:1px solid #CCC;
+}
+.userMsg p{
+	padding-left: 5px;
+	line-height: 1.8
+}

@@ -1,0 +1,85 @@
+@charset "utf-8";
+/*购物车页面没有登录的提示*/
+.nologin-tip{
+	border:1px solid #edd28b;
+	background: #fffdee;
+	padding: 10px 20px;
+	line-height: 25px;
+	margin-bottom: 20px;
+	color:#f70;
+}
+.nologin-tip .btn.btn-danger{
+	display: inline-block;
+	height: 25px;
+	line-height: 25px;
+	background: #e74649;
+	border-radius: 3px;
+	color: #FFF;
+	font-size: 12px;
+	font-weight: 400;
+	cursor:pointer;
+	padding:0px 10px;
+	vertical-align: middle;
+}
+.shopcar-table{
+	border-collapse: collapse;
+	text-align: center;
+}
+.shopcar-table .bg-pink{
+	background: #fff4e8;
+	border-bottom: 1px dotted #FFFFFF;
+}
+.shopcar-table td{
+	padding:3px 5px;
+}
+.shopcar-table img{
+	vertical-align: text-top;
+	width: 80px;
+}
+.shopcar-table .goodsinfo{
+	text-align: left;
+}
+.shopcar-table .num{
+	font-size: 0;
+}
+.shopcar-table .num button{
+	width:20px;
+	border: 1px solid #CCC;
+	cursor: pointer;
+	font-size: 12px;
+	height:22px;
+}
+.shopcar-table .num input{
+	width:42px;
+	height: 18px;
+	line-height: 18px;
+	padding:1px;
+	margin:0;
+	text-align: center;
+	border:1px solid #CCC;
+	border-left: 0;
+	border-right: 0;
+}
+.shopcar-table .num button:focus,.shopcar-table .num input:focus{
+	outline: 0;
+}
+
+/*结算按钮*/
+.btn-checkout{
+	width:90px;
+	height: 30px;
+	background: red;
+	color:#FFF;
+	font-size: 14px;
+	border:1px solid #A10000;
+	cursor: pointer;
+}
+.btn-disabled{
+	width:90px;
+	height: 30px;
+	background: #CCC;
+	color:#333;
+	font-size: 14px;
+	border:1px solid #EDEDED;
+	cursor: not-allowed;
+}

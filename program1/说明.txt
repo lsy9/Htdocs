@@ -1,0 +1,4 @@
+安装说明：
+	直接将文件夹拷到网站根目录下，不能是子目录
+	删除掉Public/Common/install.lock
+	重新安装

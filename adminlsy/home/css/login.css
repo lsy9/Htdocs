@@ -1,0 +1,196 @@
+#head {
+	width:900px;
+	height:90px;
+	border-bottom:2px solid gray;
+	background-color:#F1F2F6;
+	margin:0 auto;
+}
+#tu1 {
+	width:260px;
+	height:90px;
+}
+#tu2 {
+	width:290px;
+	height:90px;
+}
+#head img {
+	float:left;
+}
+#body {
+	width:900px;
+	height:550px;
+	margin:0 auto;
+	background-color:#FFFFFF;
+}
+
+
+#denglu {
+	width:98%;
+	height:45px;
+	border-bottom:1px solid gray;
+	margin-left:10px;
+
+}
+#denglu span {
+	display:block;
+    padding:15px 0px 0px 5px;
+	font-weight:bold;
+	font-size:20px;
+}
+#zhutizuo {
+	width:600px;
+	height:450px;
+	float:left;
+	margin-left:10px;
+}
+#hehe {
+	display:block;
+    margin:25px 0px 0px 20px;
+	font-size:12px;
+	width:580px;
+	height:25px;
+	line-height:25px;
+	background-color:#FFFAE2;
+}
+#zhutiyou {
+	width:269px;
+	height:270px;
+	border-left:1px dotted gray;
+	margin-top:55px;
+    float:right;
+}
+
+
+
+/*#zhushi {
+	position:relative;
+	bottom:-49%;
+	left:110px;
+	font-size:12px;
+	width:80%;
+	color:#666B67;	
+}
+*/
+#hang1 {
+	width:485px;
+    margin:25px 0px 0px 55px;
+}
+#hang1 span{
+    color:red;
+}
+#hang2 {
+	width:485px;
+    margin:25px 0px 0px 73px;
+}
+#hang2 span{
+    color:red;
+}
+#hang3 {
+	width:485px;
+	margin:25px 0px 0px 52px;
+}
+#hang4 {
+	width:485px;
+	margin:25px 0px 0px 52px;
+}
+#hang4 span{
+    color:red;
+}
+#hang5 {
+	width:485px;
+	margin:10px 0px 0px 40px;
+    color:gray;
+    font-size:12px;
+}
+#hang6 {
+	width:300px;
+    margin:25px 0px 0px 100px;
+}
+#hang7 {
+	width:150px;
+	margin:25px 0px 0px 130px;
+}
+#hang8 {
+	width:100px;
+	margin:25px 0px 0px 160px;
+}
+#hang13 {
+	width:285px;
+	margin:25px 0px 0px 80px;
+
+}
+#hang13 img {
+    width:100px;
+    height:40px;
+    margin-top:-10px;
+    float:right;
+}
+#hang13 span{
+    color:red;
+}
+#you1 {
+    margin:10px 0px 0px 40px;
+	line-height:30px;
+	font-size:15px;
+	width:200px;
+
+}
+#you2 {
+	margin:60px 0px 0px 40px;
+	line-height:30px;
+	font-size:15px;
+	width:200px;
+}
+#you3 {		
+    margin:10px 0px 0px 40px;
+	line-height:26px;
+	font-size:13px;
+	width:200px;
+}
+#you4 {		
+	margin:0px 0px 0px 40px;
+	line-height:26px;
+	font-size:13px;
+	width:200px;
+}
+#you3 img {
+	width:17px;
+	height:19px;
+}
+#you4 img {
+	width:17px;
+	height:19px;
+}
+#foot {
+	width:900px;
+	height:75px;
+	background-color:#F1F2F6;
+	margin:0 auto;
+	text-align:center;
+	font-size:12px;
+	color:#383831;
+}
+body {
+	background-color:#F1F2F6;
+    font-size:15px;
+}
+
+body a:hover {
+    position:relative;
+    top:1px;
+    right:1px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
