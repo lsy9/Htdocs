@@ -101,19 +101,19 @@
     
     
     //链接数据库
-    mysql_connect('localhost','root','');
+    $link=mysqli_connect('localhost','root','');
 
     //选择数据库
-    mysql_select_db('lamp111');
+    mysqli_select_db($link,'test');
 
-    mysql_set_charset('utf8');
+    mysqli_set_charset($link,'utf8');
 	
     //判断用户是否存在
     $sql="select userName from user where userName='{$userName}'";
-    $result=mysql_query($sql);
+    $result=mysqli_query($link,$sql);
    
-    if(mysql_num_rows($result)>0){
-        $array=mysql_fetch_assoc($result);
+    if(mysqli_num_rows($sresult)>0){
+        $array=mysqli_fetch_assoc($result);
        //var_dump($array);
         
         echo '<script> alert ("用户'.$array['userName'].'已存在,请重新注册");window.location.href="register.php"</script>';
@@ -123,8 +123,8 @@
         //写入数据库基本用户信息
         $sql1="insert into user(userName,password) values('{$userName}','{$password}')";
 		
-        $result = mysql_query($sql1);        
-        $id=mysql_insert_id();//取得上一步得到的id值
+        $result = mysqli_query($link,$sql1);        
+        $id=mysqli_insert_id($link);//取得上一步得到的id值
         
         //写入数据库详细用户信息
         
@@ -132,7 +132,7 @@
         
 		
 		 
-		$results = mysql_query($sql2);
+		$results = mysqli_query($link,$sql2);
          // echo $sql2; 
 		// exit; 
         if($result && $results){
@@ -147,7 +147,7 @@
 	exit;
         }  
     }
-    mysql_close();
+    mysqli_close($link);
 
 
     

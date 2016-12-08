@@ -177,12 +177,12 @@
         </div>
         <?php
 				//连库
-				mysql_connect('localhost','root','');
+				$link=mysqli_connect('localhost','root','');
 				
 				//选库
-				mysql_select_db('lamp111');
+				mysqli_select_db($link,'test');
 		
-				mysql_set_charset('utf8');   
+				mysqli_set_charset($link,'utf8');   
                 
                     //获得版块下的所有非禁用主题数目
                 $SQLZ="select count(*) as total from post where recycle=1 and tid={$id}";

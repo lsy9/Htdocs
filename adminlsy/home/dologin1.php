@@ -15,31 +15,31 @@
     //连接数据库进行用户名，密码验证；
    // include('../install/dbconfig.php');
    //链接数据库
-    mysql_connect('localhost','root','');
+   $link=mysqli_connect('localhost','root','');
 
     //选择数据库
-    mysql_select_db('lamp111');
+    mysqli_select_db($link,'test');
 
-    mysql_set_charset('utf8');
+    mysqli_set_charset($link,'utf8');
     
 	//判断
     if(!empty($userName)&&!empty($password)){
         $sql="select * from user where userName='{$userName}' and password='{$password}'";
-        $result1=mysql_query($sql);
+        $result1=mysqli_query($link,$sql);
         //echo $sql;
          
         //判断用户、密码是否正确；
-      if(mysql_num_rows($result1)>0){
+      if(mysqli_num_rows($result1)>0){
 	   
-            $row=mysql_fetch_assoc($result1);
+            $row=mysqli_fetch_assoc($result1);
             //var_dump($row);
             $sql1="select * from userDetail where id='{$row['id']}'";
-            $result=mysql_query($sql1);
+            $result=mysqli_query($link,$sql1);
 				// echo '1111';
 				// var_dump(mysql_num_rows($result));
-            if(mysql_num_rows($result)>0){
+            if(mysqli_num_rows($result)>0){
 			
-                $row1=mysql_fetch_assoc($result);
+                $row1=mysqli_fetch_assoc($result);
                 //记录登录时间比较，加积分；
                 $oldtime=$row1['time'];
               
@@ -47,10 +47,10 @@
 					$score=$row1['score']+3;
 					//在写入积分和时间
 					$sql2="update userDetail set time='{$ctime}',score='{$score}' where id='{$row['id']}'";
-					mysql_query($sql2);
+					mysqli_query($link,$sql2);
 					$sql3="select * from userDetail where id='{$row['id']}'";
-					$result=mysql_query($sql3);
-					$row3=mysql_fetch_assoc($result);
+					$result=mysqli_query($link,$sql3);
+					$row3=mysqli_fetch_assoc($result);
 					
 					$_SESSION['user'] = $row;
 					$_SESSION['userDetail']=$row3;
@@ -62,10 +62,10 @@
 				}else{
 				
 					$sql2="update userDetail set time='{$ctime}' where id='{$row['id']}'";
-					mysql_query($sql2);
+					mysqli_query($link,$sql2);
 					$sql3="select * from userDetail where id='{$row['id']}'";
-					$result=mysql_query($sql3);
-					$row3=mysql_fetch_assoc($result);
+					$result=mysqli_query($link,$sql3);
+					$row3=mysqli_fetch_assoc($link,$result);
 					
 					$_SESSION['user'] = $row;
 					$_SESSION['userDetail']=$row3;

@@ -178,7 +178,7 @@
 				//echo $sql1;
 				$res1 = mysqli_query($link,$sql1);
 				//if($res1 && mysql_num_rows($res1)>0){
-					while($arr1 = mysqli_fetch_assoc($link,$res1)){
+					while($arr1 = mysqli_fetch_assoc($res1)){
 						
 						//获得版块下的所有非禁用主题数目
 						$sql2="select count(*) as total from post where recycle=1 and tid='{$arr1['id']}'";

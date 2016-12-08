@@ -20,18 +20,18 @@
     //获得旧密码；
     //include('../../install/dbconfig.php');
     //链接数据库
-    mysql_connect('localhost','root','');
+    $link=mysqli_connect('localhost','root','');
 
     //选择数据库
-    mysql_select_db('lamp111');
+    mysqli_select_db($link,'test');
 
-    mysql_set_charset('utf8');
+    mysqli_set_charset($link,'utf8');
 	//写sql语句
     $sql="select password from user where id='{$id}'";
 	//执行
-    $result=mysql_query($sql);
+    $result=mysqli_query($link,$sql);
 	//
-    $array=mysql_fetch_assoc($result);
+    $array=mysqli_fetch_assoc($result);
     $oldpasswd=$array['password'];
 
     //判断旧密码是否相同
@@ -47,12 +47,12 @@
     }
     //改密码；
     $NSQL="update user set password='{$new}' where id={$id}";
-    $nres=mysql_query($NSQL);
+    $nres=mysqli_query($link,$NSQL);
     
-    if($nres && mysql_affected_rows()>0){
+    if($nres && mysqli_affected_rows()>0){
         echo '<script>alert("修改成功！");window.location.href="./login.php"</script>';
     }
-	mysql_close();	
+	mysqli_close($link);	
 
 
 ?>

@@ -90,12 +90,12 @@
     }
 
    //链接数据库
-    mysql_connect('localhost','root','');
+   $link= mysqli_connect('localhost','root','');
 
     //选择数据库
-    mysql_select_db('lamp111');
+    mysqli_select_db($link,'test');
 
-    mysql_set_charset('utf8');
+    mysqli_set_charset($link,'utf8');
 
 	//拼接SQL set 数据
 	 $set=array();
@@ -140,25 +140,25 @@
     // echo $SSQL;exit;
 
 	//资源
-    $sres=mysql_query($SSQL);
+    $sres=mysqli_query($link,$SSQL);
 	
 	//判断是否存在该资源，是否执行成功
-    if($sres && mysql_affected_rows()>0){
+    if($sres && mysqli_affected_rows($link)>0){
         //给session重新赋值；
         //var_dump($_SESSION);
         $QSQL="select * from userDetail where id='{$id}'";
-        $qres=mysql_query($QSQL);
-        $array=mysql_fetch_assoc($qres);
+        $qres=mysqli_query($link,$QSQL);
+        $array=mysqli_fetch_assoc($qres);
         //var_dump($array);
         
         $_SESSION['userDetail']=$array;
         
         //var_dump($_SESSION);
         $SQL1="select * from user where id='{$id}'";
-        $res1=mysql_query($SQL1);
-        $array1=mysql_fetch_assoc($res1);
+        $res1=mysqli_query($link,$SQL1);
+        $array1=mysqli_fetch_assoc($res1);
         $_SESSION['user']=$array1;
-        mysql_close();
+        mysqli_close($link);
         echo '<script> alert ("修改成功！");window.location.href="./usercenter.php?id='.$id.'"</script>';
         exit;
     }else{

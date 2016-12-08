@@ -175,17 +175,17 @@
 
             
             //链接数据库
-			mysql_connect('localhost','root','');
+			$link=mysqli_connect('localhost','root','');
  
 			//选择数据库
-			mysql_select_db('lamp111');
+			mysqli_select_db($link,'test');
 
-			mysql_set_charset('utf8');
+			mysqli_set_charset($link,'utf8');
             
             $SSQL="select count(*) as total from post where recycle=0 and title like '%".$title."%'";
           
-			$sres=mysql_query($SSQL);     
-            $sarr=mysql_fetch_assoc($sres);
+			$sres=mysqli_query($link,$SSQL);     
+            $sarr=mysqli_fetch_assoc($sres);
             $totals=$sarr['total'];
             //echo $totals;  
 
@@ -204,28 +204,28 @@
             //遍历搜索项
             $SQL="select * from post where recycle=0 and title like '%".$title."%' limit ".($pagenum-1)*$pagesize.','.$pagesize;
            
-			$res=mysql_query($SQL);
+			$res=mysqli_query($link,$SQL);
             
-            if($res && mysql_num_rows($res)>0 ){
+            if($res && mysqli_num_rows($res)>0 ){
                 
-                while($arr=mysql_fetch_assoc($res)){
+                while($arr=mysqli_fetch_assoc($res)){
                     
                     //找到每个贴子的发帖人的账户名
                         $USQL="select user.userName,userDetail.nickName from user,userDetail where user.id=userDetail.id and user.id=".$arr['uid'];
                        
 					
-					    $ures=mysql_query($USQL);
-                        $uarr=mysql_fetch_assoc($ures);
+					    $ures=mysqli_query($link,$USQL);
+                        $uarr=mysqli_fetch_assoc($ures);
                         
                     //找到帖子所在的版块的信息；
                         $BSQL="select type.name,type.pid from type,post where type.id=post.tid and post.tid=".$arr['tid'];
-                        $bres=mysql_query($BSQL);
-                        $barr=mysql_fetch_assoc($bres);
+                        $bres=mysqli_query($link,$BSQL);
+                        $barr=mysqli_fetch_assoc($bres);
                         
                     //找到帖子所在的分区的信息；
                         $FSQL="select name from type where id=pid and id=".$barr['pid'];
-                        $fres=mysql_query($FSQL);
-                        $farr=mysql_fetch_assoc($fres);
+                        $fres=mysqli_query($link,$FSQL);
+                        $farr=mysqli_fetch_assoc($fres);
         ?>
             <div class='shen'>
                 <div class="huifutietouxia">
@@ -254,7 +254,7 @@
             </div>
         <?php
              }
-             mysql_close();  }
+             mysqli_close($link);  }
         ?>
 
         <?php echo "[共".$totals."条数据]"; ?>&nbsp;&nbsp;<?php echo $pagenum."/".$totalpage."页" ?>&nbsp;&nbsp;

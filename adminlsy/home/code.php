@@ -16,7 +16,7 @@
         imagesetpixel($img,rand(5,145),rand(5,45),$pixColor);
     }
 
-    $code = '3456789abcdefghijkmnpqrstuvwxy';
+    $code = '34578abcdefghijkmnpqrstuvwxy';
 
 	$codes = '';
  
