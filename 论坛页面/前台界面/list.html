@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>LAMP兄弟连-列表页</title>
+		<style>
+		/*========top的css样式设计代码=========*/
+			*{
+				margin:0px;
+				padding:0px;
+			}
+			body{
+				background-color:#F1F2F6;
+			}
+			a{
+				text-decoration:none;
+			}
+			#top{
+				width:100%;
+				height:27px;
+				border-bottom:1px solid white;
+				background-color:#E6E9EE;
+				line-height:27px;
+			}
+			.middlediv{
+				margin:0 auto;
+				width:950px;
+			}
+			#leftnav{
+				list-style:none;
+			}
+			#leftnav li a{
+				float:left;
+				font-size:13px;
+				margin-left:5px;
+				color:#636969;
+				text-decoration:none;
+			}
+			#leftnav li a:hover{
+				color:blue;
+			}
+			#rightnav{
+				list-style:none;
+			}
+			#rightnav li a{
+				float:right;
+				font-size:13px;
+				margin-left:5px;
+				color:#636969;
+				text-decoration:none;
+			}
+			#rightnav li a:hover{
+				color:blue;
+			}
+		/*====================================*/
+		
+		/*==========header的css代码===========*/
+			#header{
+				width:950px;
+				height:80px;
+				background-color:#F1F2F6;
+				margin:0 auto;
+			}
+			#logo{
+				width:300px;
+				height:80px;
+				float:left;
+				line-height:80px;
+				margin-top:;
+			}
+			#nobrother{
+				width:300px;
+				height:80px;
+				float:left;
+				line-height:80px;
+			}
+			#login{
+				width:350px;
+				float:left;
+				font-size:15px;
+				margin-top:20px;
+				line-height:25px;
+			}
+			#login table{
+				width:330px;
+			}
+			#login table input[type=submit]{
+				width:70px;
+				height:22px;
+				cursor:pointer;
+			}
+			#login table input[type=button]{
+				width:68px;
+				height:22px;
+				background-color:#fc0;
+				border:2px solid #fc0;
+				color:white;
+				cursor:pointer;
+				box-shadow:1px 2px #ccc;
+			}
+		/*====================================*/
+		
+		/*============nav的css样式============*/
+			#nav{
+				width:100%;
+				height:45px;
+				background-color:#075992;
+				line-height:45px;
+				font-size:15px;
+				color:white;
+				/*1170B2*/
+			}
+			#middlenav li{
+				float:left;
+				list-style:none;
+				padding:0px 10px 0px 10px;
+			}
+			#middlenav li a{
+				color:white;
+			}
+			#middlenav li a:hover{
+				color:yellow;
+			}
+			#middlenav .point li{
+				background-color:#1170B2;
+			}
+			#fastroad{
+				float:right;
+				margin-top:5px;
+			}
+		/*====================================*/
+		
+		/*==========大盒子的css样式===========*/
+			#big{
+				width:950px;
+				margin:0 auto;
+			}
+			#search{
+				height:41px;
+				background-image:url("./public/searchA.jpg");
+				line-height:38px;
+				box-shadow:0px 2px 12px #ccc;
+			}
+			#search form{
+				margin-left:70px;
+				float:left;
+			}
+			#search form input[type=text]{
+				height:25px;
+			}
+			#search form select{
+				width:60px;
+				height:30px;
+			}
+			#search form input[type=submit]{
+				width:50px;
+				height:30px;
+			}
+			#search #hot li{
+				float:left;
+				list-style:none;
+				margin-left:10px;
+				font-size:15px;
+				line-height:45px;
+			}
+			#search #hot li.red{
+				color:red;
+			}
+			#search #guanzhu{
+				float:left;
+				margin-left:160px;
+				/*border:1px solid red;*/
+			}
+			#search #guanzhu ul{
+				margin-top:3px;
+				list-style:none;
+			}
+			#search #guanzhu ul li{
+				float:left;
+				margin-left:8px;
+			}
+			#yindao{
+				width:950px;
+				height:45px;
+				line-height:45px;
+				/*border:1px solid red;*/
+			}
+			#yindao p{
+				width:950px;
+				height:45px;
+				line-height:45px;
+				padding-left:25px;
+				float:left;
+				/*border:1px solid red;*/
+				background:url("./public/ydjian.png") no-repeat 0px,10px;
+			}
+			#yindao p a{
+				font-size:15px;
+				color:#636969;
+			}
+			#yindao p a:hover{
+				color:red;
+			}
+			#yindao #newt{
+				float:right;
+			}
+			#list{
+				width:950px;
+				float:left;
+				padding-bottom:20px;
+				border-radius:5px;
+				background-color:white;
+				/*border:1px solid green;*/
+			}
+			#list #listbt{
+				width:950px;
+				float:left;
+				/*border:1px solid blue;*/
+			}
+			#list #listbt #bkname{
+				width:100px;
+				height:50px;
+				float:left;
+				font-size:15px;
+				line-height:50px;
+				padding-left:20px;
+				margin-left:20px;
+				/*border:1px solid red;*/
+				background:url("./public/star.png") no-repeat left center;
+			}
+			#list #listbt #bzname{
+				width:100px;
+				height:50px;
+				float:right;
+				color:#636969;
+				font-size:15px;
+				line-height:50px;
+			}
+			#list #bkinfo{
+				width:920px;
+				height:100px;
+				line-height:100px;
+				margin-top:-20px;
+				margin-bottom:-20px;
+				float:left;
+			}
+			#list #bkinfo #bklogo{
+				width:60px;
+				height:60px;
+				float:left;
+				margin-top:20px;
+				margin-left:21px;
+				/*border:1px solid blue;*/
+			}
+			#list #bkinfo #tjinfo{
+				width:320px;
+				height:28px;
+				margin-top:20px;
+				float:left;
+			}
+			#list #bkinfo #tjinfo ul{
+				list-style:none;
+				float:left;
+				height:30px;
+				line-height:30px;
+				/*border:1px solid red;*/
+			}
+			#list #bkinfo #tjinfo ul li{
+				float:left;
+				margin-left:10px;
+				font-size:12px;
+				color:#636969;
+			}
+			#list #bkinfo #tjinfo ul li span{
+				color:red;
+			}
+			#list #bkinfo #bkjianj{
+				width:320px;
+				height:30px;
+				float:left;
+				margin-top:50px;
+				margin-left:-321px;
+			}
+			#list #bkinfo #bkjianj{
+				/*border:1px solid blue;*/
+			}
+			#list #bkinfo #bkjianj p{
+				font-size:12px;
+				height:30px;
+				float:left;
+				line-height:30px;
+				padding-left:10px;
+				/*border:1px solid yellow;*/
+			}
+			#list #page{
+				float:left;
+				width:950px;
+				margin-top:20px;
+			}
+			#list #page #pagefy{
+				float:left;
+			}
+			#list #page #pagefy ul{
+				list-style:none;
+				margin-left:18px;
+			}
+			#list #page #pagefy ul li{
+				float:left;
+				margin-left:5px;
+				padding:4px 0px;
+				border:1px solid #636969;
+			}
+			#list #page #pagefy ul li a{
+				padding:5px 10px;
+				color:#636969;
+			}
+			#list #page #pagefy ul li a:hover{
+				color:white;
+				background-color:#636969;
+			}
+			#list #page #fatie{
+				float:right;
+				margin-right:20px;
+			}
+			#list #page #fatie button{
+				width:60px;
+				height:30px;
+				color:white;
+				background-color:#fc0;
+				border:1px solid #fc0;
+				border-left:2px solid white;
+				border-top:2px solid white;
+				border-radius:5px;
+				font-weight:bold;
+				cursor:pointer;
+				box-shadow:5px 5px 12px #ccc;
+			}
+			#list #tiezifl{
+				float:left;
+				width:950px;
+				height:25px;
+				line-height:25px;
+				margin-top:15px;
+				background-color:#F1F2F6;
+				border-bottom:2px solid #DCDCDC;
+				font-size:15px;
+			}
+			#list #tiezifl ul{
+				list-style:none;
+			}
+			#list #tiezifl ul li{
+				float:left;
+				padding:0px 15px;
+				margin-left:25px;
+			}
+			#list #tiezifl ul li:hover{
+				background-color:white;
+				margin-top:2px;
+			}
+			#list #tiezifl ul li a{
+				color:black;
+			}
+			#list #tiezifl ul li a:hover{
+				color:red;
+			}
+			#list #tiezifl ul li.gaol{
+				background-color:white;
+				margin-top:2px;
+				padding:0px 15px 0px 15px ;
+			}
+			#list #tiezifl2{
+				width:915px;
+				height:30px;
+				float:left;
+				margin-top:15px;
+				padding-left:35px;
+				border-bottom:1px solid #ccc;
+			}
+			#list #tiezifl2 ul{
+				list-style:none;
+			}
+			#list #tiezifl2 ul li{
+				float:left;
+				margin-left:5px;
+				font-size:12px;
+			}
+			#list #tiezifl2 ul li a{
+				color:#fc3947;
+			}
+			#list #tiezifl2 ul li a:hover{
+				color:black;
+			}
+			#list #biaotou{
+				width:930px;
+				height:30px;
+				line-height:30px;
+				float:left;
+				margin:0px 10px;
+				border-bottom:1px solid #ccc;
+			}
+			#list #biaotou ul{
+				list-style:none;
+			}
+			#list #biaotou ul li{
+				float:left;
+				font-size:15px;
+				color:#636969;
+				margin-left:55px;
+			}
+			#list #biaotou ul li a{
+				color:#636969;
+			}
+			#list #biaotou ul li a:hover{
+				color:blue;
+			}
+			#list #biaotou ul li.tiezibt{
+				width:600px;
+				margin-left:20px;
+			}
+			#list #listks .invitationzt{
+				width:910px;
+				height:30px;
+				line-height:30px;
+				float:left;
+				margin-left:10px;
+				padding-left:20px;
+				/*border:1px solid red;*/
+				border-bottom:1px dashed #ccc;
+			}
+			#list #listks .invitationzt a{
+				font-size:15px;
+				color:black;
+			}
+			#list #listks .invitationzt a:hover{
+				color:blue;
+			}
+			#list #listks .invitationzt .invitalogo{
+				width:30px;
+				height:30px;
+				float:left;
+				/*border:1px solid blue;*/
+			}
+			#list #listks .invitationzt .invitationbt{
+				width:600px;
+				height:30px;
+				float:left;
+				/*border:1px solid blue;*/
+			}
+			#list #listks .invitationzt .custorzt{
+				width:25px;
+				height:30px;
+				float:left;
+			}
+			#list #listks .invitationzt .custor{
+				width:85px;
+				height:30px;
+				float:left;
+				/*border:1px solid blue;*/
+			}
+			#list #listks .invitationzt .reply{
+				width:85px;
+				height:30px;
+				float:left;
+				/*border:1px solid blue;*/
+			}
+			#list #listks .invitationzt .last{
+				width:78px;
+				height:30px;
+				float:left;
+				/*border:1px solid blue;*/
+			}
+		/*====================================*/
+		
+		/*===========clear的css样式===========*/
+			#clear{
+				clear:both;
+			}
+		/*====================================*/
+		
+		/*==========footer的css样式===========*/
+			#footer{
+				width:950px;
+				height:70px;
+				text-align:center;
+				padding-top:20px;
+				margin:0 auto;
+			}
+			#footer p{
+				font-size:13px;
+				line-height:18px;
+				color:#636969;
+				margin-bottom:20px;
+			}
+		/*=============footer结束=============*/
+		</style>
+	</head>
+	<body>
+		<!--顶部条-->
+		<div id="top">
+			<div class="middlediv">
+				<ul id="leftnav">
+					<li><a href="#">设为首页</a></li>
+					<li><a href="#">收藏LAMP兄弟连</a></li>
+				</ul>
+				<ul id="rightnav">
+					<li><a href="#">|帮助</a></li>
+					<li><a href="#">推广链接</a></li>
+					<li><a href="#">社区应用</a></li>
+					<li><a href="#">最新帖子</a></li>
+					<li><a href="#">精华区</a></li>
+					<li><a href="#">社区服务</a></li>
+					<li><a href="#">会员列表</a></li>
+					<li><a href="#">统计排行</a></li>
+					<li><a href="#">搜索</a></li>
+				</ul>
+			</div>
+		</div>
+		<!--顶部条结束-->
+		
+		<!--header头-->
+		<div id="header">
+			<div id="logo">
+				<img src="./public/logo.jpg"/>
+			</div>
+			<div id="nobrother">
+				<img src="./public/nobrother.jpg"/>
+			</div>
+			<div id="login">
+				<form action="action.php" method="post">
+					<table>
+						<tr>
+							<td><input type="text" name="uname" placeholder="输入用户名"/></td>
+							<td><input type="checkbox" name=""/>记住密码</td>
+							<td><a href="#"/>找回密码</a></td>
+						</tr>
+						<tr>
+							<td><input type="password" name="upass" placeholder=""/></td>
+							<td><input type="submit" value="登陆"/></td>
+							<td><a href="#"><input type="button" value="注册"/></a></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+		<!--header头结束-->
+		
+		<!--导航条-->
+		<div id="nav">
+			<div class="middlediv">
+				<ul id="middlenav">
+					<li><a href="#">培训课程</a></li>
+					<span class="point"><li><a href="#">论坛</a></li></span>
+					<li><a href="#">兄弟连云课堂</a></li>
+					<li><a href="#">PHP视频</a></li>
+					<li><a href="#">Linux视频</a></li>
+					<li><a href="#">战地日记</a></li>
+				</ul>
+				<div id="fastroad">
+					<a href="#"><img src="./public/fastroad.jpg"/></a>
+				</div>
+			</div>
+		</div>
+		<!--导航条结束-->
+		
+		<!--大盒子-->
+		<div id="big">
+			<!--顶部搜索条-->
+			<div id="search">
+				<form action="#" method="post">
+					<input type="text" placeholder="让学习成为一种习惯!" name=""/>
+					<select name="">
+						<option value="1">帖子</option>
+						<option value="2">日志</option>
+						<option value="3">用户</option>
+						<option value="4">板块</option>
+					</select>
+					<input type="submit" value="搜索"/>
+				</form>
+				<ul id="hot">
+					<li>热搜：</li>
+					<li class="red">php</li>
+					<li class="red">php视频</li>
+					<li class="red">php教程</li>
+				</ul>
+				<div id="guanzhu">
+					<ul>
+						<li><a href="#"><img src="./public/sina_n.png" title="关注新浪微博"/></a></li>
+						<li><a href="#"><img src="./public/qq_n.png" title="添加到QQ"/></a></li>
+						<li><a href="#"><img src="./public/6.gif" title="添加笔记"/></a></li>
+						<li><a href="#"><img src="./public/21.gif" title="百度浏览"/></a></li>
+						<li><a href="#"><img src="./public/medal.png" title="排行榜"/></a></li>
+					</ul>
+				</div>
+			</div>
+			<!--顶部搜索条结束-->
+			
+			<!--引导层开始-->
+			<div id="yindao">
+				<p><a href="#">LAMP兄弟连</a> > <a href="#">PHP技术交流</a></p>
+			</div>
+			<!--引导层结束-->
+			
+			<!--列表开始-->
+			<div id="list">
+				<div id="listbt">
+					<div id="bkname">
+						<h4>PHP技术交流</h4>
+					</div>
+					<div id="bzname">
+						<h4>版主：远飞</h4>
+					</div>
+				</div>
+				<div id="bkinfo">
+					<div id="bklogo">
+						<img src="./public/PHP.png"/>
+					</div>
+					<div id="tjinfo">
+						<ul>
+							<li>今日:<span>3</span> |</li>
+							<li>主题:<span>10736</span> |</li>
+							<li>贴数:<span>93546</span></li>
+						</ul>
+					</div>
+					<div id="bkjianj">
+						<p>PHP基础编程、疑难解答、学习和开发中的经验总结等。</p>
+					</div>
+				</div>
+				<div id="page">
+					<div id="pagefy">
+						<ul>
+							<li><a href="#">1</a></li>
+							<li><a href="#">2</a></li>
+							<li><a href="#">3</a></li>
+							<li><a href="#">4</a></li>
+							<li><a href="#">5</a></li>
+							<li><a href="#">6</a></li>
+							<li><a href="#">…537</a></li>
+							<li><a href="#">下一页</a></li>
+						</ul>
+					</div>
+					<div id="fatie">
+						<a href="#"><button image="./public/fatie.png">发帖</button></a>
+					</div>
+				</div>
+				<div id="tiezifl">
+					<ul>
+						<li class="gaol"><a href="#">全部</a></li>
+						<li><a href="#">精华</a></li>
+						<li><a href="#">投票</a></li>
+						<li><a href="#">悬赏</a></li>
+						<li><a href="#">商品</a></li>
+					</ul>
+				</div>
+				<div id="tiezifl2">
+					<ul>
+						<li><a href="#">全部</a> |</li>
+						<li><a href="#">已解决</a> |</li>
+						<li><a href="#">我要提问</a> |</li>
+						<li><a href="#">PHP</a> |</li>
+						<li><a href="#">其他</a> |</li>
+						<li><a href="#">经验技巧</a> |</li>
+					</ul>
+				</div>
+				<div id="biaotou">
+					<ul>
+						<li class="tiezibt">排序:<a href="#">最新发帖</a>|<a href="#">最后回复</a></li>
+						<li><a href="#">作者</a></li>
+						<li><a href="#">回复</a></li>
+						<li><a href="#">最后发表</a></li>
+					</ul>
+				</div>
+				<div id="listks">
+					<div class="invitationzt">
+						<div class="invitalogo">
+							<img src="./public/tongzhi.png"/>
+						</div>
+						<div class="invitationbt">
+							<a href="#">站点公告：《跟兄弟连学PHP》正式发售啦！</a>
+						</div>
+						<div class="custorzt">
+							<img src="./public/zuanshi.png"/>
+						</div>
+						<div class="custor">
+							<a href="#">海峰</a>
+						</div>
+						<div class="reply">
+							<a href="#">27/5961</a>
+						</div>
+						<div class="last">
+							<a href="#">20分钟前</a>
+						</div>
+					</div>
+					<div class="invitationzt">
+						<div class="invitalogo">
+							<img src="./public/tongzhi.png"/>
+						</div>
+						<div class="invitationbt">
+							<a href="#">站点公告：《跟兄弟连学PHP》正式发售啦！</a>
+						</div>
+						<div class="custorzt">
+							<img src="./public/zuanshi.png"/>
+						</div>
+						<div class="custor">
+							<a href="#">海峰</a>
+						</div>
+						<div class="reply">
+							<a href="#">27/5961</a>
+						</div>
+						<div class="last">
+							<a href="#">20分钟前</a>
+						</div>
+					</div>
+					<div class="invitationzt">
+						<div class="invitalogo">
+							<img src="./public/tongzhi.png"/>
+						</div>
+						<div class="invitationbt">
+							<a href="#">站点公告：《跟兄弟连学PHP》正式发售啦！</a>
+						</div>
+						<div class="custorzt">
+							<img src="./public/zuanshi.png"/>
+						</div>
+						<div class="custor">
+							<a href="#">海峰</a>
+						</div>
+						<div class="reply">
+							<a href="#">27/5961</a>
+						</div>
+						<div class="last">
+							<a href="#">20分钟前</a>
+						</div>
+					</div>
+					<div class="invitationzt">
+						<div class="invitalogo">
+							<img src="./public/tongzhi.png"/>
+						</div>
+						<div class="invitationbt">
+							<a href="#">站点公告：《跟兄弟连学PHP》正式发售啦！</a>
+						</div>
+						<div class="custorzt">
+							<img src="./public/zuanshi.png"/>
+						</div>
+						<div class="custor">
+							<a href="#">海峰</a>
+						</div>
+						<div class="reply">
+							<a href="#">27/5961</a>
+						</div>
+						<div class="last">
+							<a href="#">20分钟前</a>
+						</div>
+					</div>
+					<div class="invitationzt">
+						<div class="invitalogo">
+							<img src="./public/tongzhi.png"/>
+						</div>
+						<div class="invitationbt">
+							<a href="#">站点公告：《跟兄弟连学PHP》正式发售啦！</a>
+						</div>
+						<div class="custorzt">
+							<img src="./public/zuanshi.png"/>
+						</div>
+						<div class="custor">
+							<a href="#">海峰</a>
+						</div>
+						<div class="reply">
+							<a href="#">27/5961</a>
+						</div>
+						<div class="last">
+							<a href="#">20分钟前</a>
+						</div>
+					</div>
+					<div class="invitationzt">
+						<div class="invitalogo">
+							<img src="./public/tongzhi.png"/>
+						</div>
+						<div class="invitationbt">
+							<a href="#">站点公告：《跟兄弟连学PHP》正式发售啦！</a>
+						</div>
+						<div class="custorzt">
+							<img src="./public/zuanshi.png"/>
+						</div>
+						<div class="custor">
+							<a href="#">海峰</a>
+						</div>
+						<div class="reply">
+							<a href="#">27/5961</a>
+						</div>
+						<div class="last">
+							<a href="#">20分钟前</a>
+						</div>
+					</div>
+					<div class="invitationzt">
+						<div class="invitalogo">
+							<img src="./public/tongzhi.png"/>
+						</div>
+						<div class="invitationbt">
+							<a href="#">站点公告：《跟兄弟连学PHP》正式发售啦！</a>
+						</div>
+						<div class="custorzt">
+							<img src="./public/zuanshi.png"/>
+						</div>
+						<div class="custor">
+							<a href="#">海峰</a>
+						</div>
+						<div class="reply">
+							<a href="#">27/5961</a>
+						</div>
+						<div class="last">
+							<a href="#">20分钟前</a>
+						</div>
+					</div>
+					<div class="invitationzt">
+						<div class="invitalogo">
+							<img src="./public/tongzhi.png"/>
+						</div>
+						<div class="invitationbt">
+							<a href="#">站点公告：《跟兄弟连学PHP》正式发售啦！</a>
+						</div>
+						<div class="custorzt">
+							<img src="./public/zuanshi.png"/>
+						</div>
+						<div class="custor">
+							<a href="#">海峰</a>
+						</div>
+						<div class="reply">
+							<a href="#">27/5961</a>
+						</div>
+						<div class="last">
+							<a href="#">20分钟前</a>
+						</div>
+					</div>
+					<div class="invitationzt">
+						<div class="invitalogo">
+							<img src="./public/tongzhi.png"/>
+						</div>
+						<div class="invitationbt">
+							<a href="#">站点公告：《跟兄弟连学PHP》正式发售啦！</a>
+						</div>
+						<div class="custorzt">
+							<img src="./public/zuanshi.png"/>
+						</div>
+						<div class="custor">
+							<a href="#">海峰</a>
+						</div>
+						<div class="reply">
+							<a href="#">27/5961</a>
+						</div>
+						<div class="last">
+							<a href="#">20分钟前</a>
+						</div>
+					</div>
+				</div>
+				<div id="page">
+					<div id="pagefy">
+						<ul>
+							<li><a href="#">1</a></li>
+							<li><a href="#">2</a></li>
+							<li><a href="#">3</a></li>
+							<li><a href="#">4</a></li>
+							<li><a href="#">5</a></li>
+							<li><a href="#">6</a></li>
+							<li><a href="#">…537</a></li>
+							<li><a href="#">下一页</a></li>
+						</ul>
+					</div>
+					<div id="fatie">
+						<a href="#"><button image="./public/fatie.png">发帖</button></a>
+					</div>
+				</div>
+			</div>
+			<!--列表结束-->
+		</div>
+		<div id="clear"></div>
+		<!--大盒子结束-->
+			
+		<!--页面尾开始-->
+		<div id="footer">
+			<center>
+				<p>
+					联系我们|无图版|手机浏览|清除Cookies<br/>
+					Powered by phpwind v8.7 Certificate Copyright Time now is:02-17 19:40 <br/>
+					©2006 - 2015 LAMP兄弟连 版权所有 Gzip disabled 京ICP备11018177号 Total 0.072194(s) query 3,<img src="./public/pic.gif"/>京公网安备11011402000177
+				</p>
+			</center>
+		</div>
+		<!--页面尾结束-->
+	</body>
+</html>

@@ -1,0 +1,816 @@
+目录说明
+	项目目录 /www/shop
+
+	前台目录说明
+		./index.php 	前台首页
+		./reg.php		注册页面
+		./login.php		登录页面
+		./doaction.php	处理前台所有用户操作
+
+		./public		存放所有公共文件目录
+		./public/common	存放公共php文件目录
+		./public/common/header.php 		前台公共顶部
+		./public/common/foot.php 		前台公共底部
+		./public/common/yzm.php 		验证码
+		./public/common/functions.php 	函数库文件
+
+		./public/images	存放前台页面的图片
+		./public/css	存放前台页面css
+		./public/js		存放前台页面js
+
+		./public/uploads 	存放用户所有上传的文件
+
+
+第一步。前台页面
+============================
+1.注册页面 ./reg.php
+	提交地址 action="./doaction.php?act=reg"
+	提交方法 method="POST"
+	注册需要一个验证码 ./public/common/yzm.php
+		需要注意 有一个字体文件
+	注意提交表单name值
+
+2.用户操作处理页面 ./doaction.php
+	先设置页面字符集
+	开启session
+	引入数据库配置连接页面	./public/common/config.php
+	接收用户的操作	$act = $_GET['act']
+	判断用户操作	switch($act)
+
+3.注册提交到doaction.php?act=reg
+	匹配到reg
+	先接收表单提交的内容，对内容进行处理
+		1.先验证验证码是否正确
+			将$_SESSION['code'](验证码页面获取)和表单提交的验证码都转为小写
+			进行比较
+			一致 --> 进行下一步 
+			不一致 --> 弹窗提示，并跳转到注册页面
+		2.验证两次密码是否一致
+			一致 --> 进行下一步
+			不一致 --> 弹窗提示，并跳转到注册页面
+
+		3.通过用户提交过来的用户名作为where条件进行查询shop_user表
+			1.拼接sql语句
+			2.发送查询
+			3.检测查询
+				如果查询到数据，说明用户名已存在，弹窗提示，并返回到注册页面
+				如果查不到数据，说明用户名不存在，可用。进行下一步
+					1,对密码进行md5加密
+					2,拼接插入的sql语句
+					3,执行sql语句
+					4,判断是否成功，如果不成功，弹窗提示注册失败，返回到注册页面
+					5,如果插入成功,进行下一步
+						a.获取最新插入的id，作为用户详情表的uid
+							$uid = mysqli_insert_id($link);
+						b.设置注册时间=最后登录时间=当前时间
+						c.设置用户regip=$_SERVER['REMOTE_ADDR']，和默认金币$gold;
+						d.拼接插入sql语句，插入到用户详情表
+						e.执行sql语句
+						f.判断是否成功，如果不成功，将shop_user表刚插入的那条记录删除，并弹窗提示注册失败，跳转到注册页面
+						g.插入成功，记录$_SESSION['user']['id']=$uid;弹窗提示注册成功，跳转到首页
+
+4.登录页面 ./login.php
+	提交地址 action="./doaction.php?act=login"
+	提交方式：method="post"
+
+5.登录提交到doaction.php?act=login
+	登录匹配到 login
+	1.接收表单数据并处理
+	2.对密码进行md5加密
+	3.拼接sql语句，根据用户名和加密后的密码作为条件进行查询
+		select id,level from shop_user where username = '{$username}' and userpwd = '{$userpwd}'
+	4.执行查询，如果查询不成功
+		弹窗提示登录失败，跳转到登录页面
+	5.查询成功，说明帐户名，密码正确
+		1.获取到当前结果集中的数据 $row,获取到id,level
+		2.通过上一步获得的id进行拼接sql语句，查询用户详情表中的数据
+		3.执行sql语句，并检测是否查询成功，不成功，则弹窗提示登录失败，跳转到登录页面（基本上不会碰到这个情况）
+		4.查询用户详情表成功，获取结果集中的数据$row
+		5.检测是否是当天第一次登录，
+			$time = time();		// 获取当前时间，用户更新最后登录时间
+			$lasttime = $row['lasttime'];
+			// 格式化时间，首先需要在doaction.php最上面添加设置默认时区
+			$now = date('Ymd',$time);	// 不赋值给$time是因为后面更新操作需要使用$time
+			$lasttime = date('Ymd',$lasttime);
+			if(($now-$lasttime)>=1){	// 说明至少已经过了一天了
+				// 金币+10
+				$gold = $row['gold'] + 10;
+			}
+
+		6.拼接更新的sql语句，需要更新最后登录时间。如果是第一次登录，则同时更新金币数量，如果不是第一次登录，则不更新金币数量
+			所以需要设置$gold是否需要更新
+			if(($now-$lasttime)>=1){	// 说明至少已经过了一天了
+				// 金币+10
+				$gold = $row['gold'] + 10;
+
+				$gold = ",gold={$gold}";	// $gold = ',gold=40'
+			}
+
+			$sql = "update shop_user_details set lasttime={$time}{$gold} where uid = {$id}"
+			/*
+				如果是当天第一次登录
+				update shop_user_details set lasttime=123,gold=40 where uid = 1
+
+				如果不是
+				update shop_user_details set lasttime=123 where uid = 1
+			*/
+
+		7.执行更新，并检测  $result && mysqli_afffected_rows($link)>0
+			如果更新失败 弹窗提示登录失败，跳转到登录页面，（这个情况很少遇到）
+		8.更新成功
+			a.记录session
+				$_SESSION['user']['id'] = $id
+				$_SESSION['user']['level'] = $level;
+			b.弹窗提示 登录成功
+				如果$gold不为空，则提示金币+10
+				如果$gold为空，说明不是当天第一次登录，不提示金币+10
+				跳转到首页	
+		登录操作完成
+
+6.前台公共顶部显示设置 ./public/common/header.php
+	1.开启session
+	2.检测$_SESSION['user'] 是否为空，如果为空，显示登录和注册
+	3.如果不为空，说明用户已经登录，引入数据库配置连接文件
+	4.拼接sql语句，通过session id 查询username,nickname
+	5.判断是否查询成功，查询不成功，删除session user 显示登录注册
+	6.查询成功，获取结果集中的数据
+	7.优先显示用户昵称nickname，如果$row['nickname']为空显示$row['username']，如果不为空，显示$row['nickname']，显示退出连接(href="./doaction.php?act=layout")
+
+7.退出操作
+	点击退出连接 href="./doaction.php?act=layout"
+	进入doaction.php执行退出操作
+
+8.处理退出操作 ./doaction.php?act=layout
+	1.销毁session user ----- unset($_SESSION['user']);
+	2.跳转到首页 header();
+
+------------------------------------------
+前台暂时结束
+------------------------------------------
+
+
+==========================================
+后台目录说明
+	/www/shop/admin			后台目录
+	./index.php 			后台首页文件,框架 frameset
+	./top.php 				后台公共顶部导航，存放模块基本管理连接
+							打开方式，在左侧打开
+	./login.php 			后台登录页面
+	./doaction.php 			全局操作处理
+
+	./user 					是用户管理模块目录
+	./user/usermenu.php 	
+	./user/show.php 		默认显示在后台首页，显示所有用户
+
+
+
+后台操作
+=======================================
+./ == /shop/admin
+
+1.后台登录验证，权限验证 ./index.php
+	1.开启session
+	2.验证用户是否登录，$_SESSION['user'] 是否为空
+		为空，提示请登录，跳转到后台登录页面 ./login.php
+		不为空，则判断用户等级是否为管理员，只有管理员才可以进入后台
+			
+			if($_SESSION['user']['level'] !=1){
+				说明不是管理员，没有权限，弹窗提示无权限，跳转到前台首页
+				退出
+			}
+
+			进入到后台页面
+
+2.如果没有登录，跳转到后台登录页面，./login.php
+	提交地址	action="./doaction.php?act=login"
+	提交方式 	method="post"
+
+
+3.后台全局操作处理页面  ./doaction.php
+	先设置页面字符集
+	开启session
+	引入数据库配置连接页面	../public/common/config.php
+	接收用户的操作	$act = $_GET['act']
+	判断用户操作	switch($act)
+
+4.后台用户登录处理 ./doaction.php?act=login
+	登录匹配到 login
+		1.接收表单数据并处理
+		2.对密码进行md5加密
+		3.拼接sql语句，根据用户名和加密后的密码作为条件进行查询
+			select id,level from shop_user where username = '{$username}' and userpwd = '{$userpwd}'
+		4.执行查询，如果查询不成功
+			弹窗提示登录失败，跳转到登录页面
+		5.查询成功，说明帐户名，密码正确
+			1.获取到当前结果集中的数据 $row,获取到id,level
+			2.通过上一步获得的id进行拼接sql语句，查询用户详情表中的数据
+			3.执行sql语句，并检测是否查询成功，不成功，则弹窗提示登录失败，跳转到登录页面（基本上不会碰到这个情况）
+			4.查询用户详情表成功，获取结果集中的数据$row
+			5.检测是否是当天第一次登录，
+				$time = time();		// 获取当前时间，用户更新最后登录时间
+				$lasttime = $row['lasttime'];
+				// 格式化时间，首先需要在doaction.php最上面添加设置默认时区
+				$now = date('Ymd',$time);	// 不赋值给$time是因为后面更新操作需要使用$time
+				$lasttime = date('Ymd',$lasttime);
+				if(($now-$lasttime)>=1){	// 说明至少已经过了一天了
+					// 金币+10
+					$gold = $row['gold'] + 10;
+				}
+
+			6.拼接更新的sql语句，需要更新最后登录时间。如果是第一次登录，则同时更新金币数量，如果不是第一次登录，则不更新金币数量
+				所以需要设置$gold是否需要更新
+				if(($now-$lasttime)>=1){	// 说明至少已经过了一天了
+					// 金币+10
+					$gold = $row['gold'] + 10;
+
+					$gold = ",gold={$gold}";	// $gold = ',gold=40'
+				}
+
+				$sql = "update shop_user_details set lasttime={$time}{$gold} where uid = {$id}"
+				/*
+					如果是当天第一次登录
+					update shop_user_details set lasttime=123,gold=40 where uid = 1
+
+					如果不是
+					update shop_user_details set lasttime=123 where uid = 1
+				*/
+
+			7.执行更新，并检测  $result && mysqli_afffected_rows($link)>0
+				如果更新失败 弹窗提示登录失败，跳转到登录页面，（这个情况很少遇到）
+			8.更新成功
+				a.记录session
+					$_SESSION['user']['id'] = $id
+					$_SESSION['user']['level'] = $level;
+				b.弹窗提示 登录成功
+					如果$gold不为空，则提示金币+10
+					如果$gold为空，说明不是当天第一次登录，不提示金币+10
+					跳转到后台首页
+			登录操作完成
+
+5.后台注销/退出操作 
+	href="./doaction.php?act=layout"
+	点击连接执行退出操作
+
+6.后台用户退出操作
+	1.匹配到layout
+	2.销毁session user
+	3.跳转到前台首页 或者 后台登录页面都可以
+
+============ 用户模块 =================
+1.用户管理 ./admin/usermenu.php
+	功能
+		显示用户管理的所有功能性操作页面链接地址
+		1.添加用户
+		2.查看用户
+		3.回收站
+
+------------ 用户操作处理doaction.php在 user目录下 ----------
+
+2.查看用户页面 ./admin/user/show.php
+	功能：
+		1.显示所有用户详情
+		2.分页
+		3.搜索
+		4.搜索分页
+		5.禁用用户
+		6.修改用户
+
+	实现：
+		1.显示所有用户详情
+			a.输出表格
+			b.引入数据库配置连接文件 ../../public/common/config.php
+			c.拼接sql语句,查询所有用户详情，多表联查 where u.id = d.uid 
+				$sql = "select u.id,...,d.gold... from shop_user u,shop_user_details d where u.id=d.uid";
+
+			d.执行查询，检测是否查询到数据，如果查询结果为空，显示查无数据
+				$result = mysqli_query($link,$sql);
+				if($result && mysqli_num_rows($result)>0){
+					// 查询到数据，执行e步骤
+				} else {
+					// 没有查询到数据，或者where条件限制(为搜索功能做准备)，显示查无数据
+				}
+			e.查询到数据，循环输出到表格中
+			f.引入函数库文件，../../public/common/functions.php
+				主要使用getLevel()	函数，获取用户等级的文字
+					function getLevel($level){
+						switch($level){
+							case 1:	
+								$level = '管理员';
+							break;
+							...
+						}
+						return $level;
+					}
+				使用getSex() 函数，获取用户性别的文字
+					function getSex($sex){
+						switch($sex){
+							case 1:	
+								$sex = '男';
+							break;
+							...
+						}
+						return $sex;
+					}
+			g.判断用户头像是否设置，如果没有设置，则使用默认的头像
+				../../public/images/default.jpg
+
+		2.搜索
+			a.设置搜索表单
+				1.提交地址：当前页面 ./show.php
+				2.提交方式：get提交，不能使用POST提交
+				3.选择搜索类型，使用下拉列表，<select name='type'>
+					选项 通过id <option	value="id">
+					username value='username'
+					nickname value='nickname'
+				4.输入关键字 input type='text' name='search'
+					点击提交
+			b.在第2步中的 $page 前面接收$type,$search为后面的搜索分页做准备
+			c.拼接search where条件
+				如果搜索关键字不为空，表名要搜索
+				if(!empty($search)){
+					// 模糊搜索， 加 '' 加%%
+					$search_where = " and {$type}='%{$search}%'";
+				}
+			d.修改第1步中的查询所有用户信息sql语句
+				$sql = "select u.id,...,d.gold... from shop_user u,shop_user_details d where u.id=d.uid{$search_where}";
+				// 这里的拼接和上面的拼接gold，登录加金币一样
+				继续执行第1步中的步骤
+
+		3.实现用户分页
+			a.获取当前页面的page
+				$page = $_GET['page'] ? $_GET['page'] : 1;
+			b.设置每页显示多少条 $pageSize = 5; 默认显示5条
+			c.设置偏移量，$pageOffset = ($page-1)*$pageSize;
+			d.获取查询的数据总共有多少条 , 拼接sql语句
+				select count(*) num from shop_user u,shop_user_details d where u.id = d.uid;
+			e.从结果集中拿到$row['num'];赋值给 $total; 
+				$total 表示当前查询到的结果总共有多少条记录
+			f.设置最多有多少页 $pageMax = ceil($total/$pageSize);		
+			g.以上变量写在第1步(显示用户详情)中的sql语句之前
+			h.修改第1步中的sql语句，增加limit条件
+				$sql = "select u.id,...,d.gold... from shop_user u,shop_user_details d where u.id=d.uid limit {$pageOffset},{$pageSize}";
+
+				继续执行第1步中的步骤
+			i.增加上一页，下一页，首页，尾页，当前页，总页信息
+				当前页 $page
+				总页	$pageMax
+				首页 href="./show.php?page=1"
+				尾页 href="./show.php?page=<?php echo $pageMax;?>"
+				--------------------------------
+				下一页，上一页,需要考虑临界点
+				上一页的临界点是第一页，
+				下一页的临界点是$pageMax
+				if($page == 1){
+					$pagePrev = 1;
+				} else {
+					$pagePrev = $page - 1;
+				}
+
+				if($page == $pageMax){
+					$pageNext = $pageMax;
+				} else {
+					$pageNext = $page + 1;
+				}
+
+				上一页 href="./show.php?page=<?php echo $pagePrev;?>"
+				下一页 href="./show.php?page=<?php echo $pageNext;?>"
+
+		4.搜索分页功能
+			注意事项，搜索过后，点击上一页下一页，还是显示的搜索结果
+			a.给where条件添加搜索条件
+				1.修改第3步(分页操作)中查询总条数的where条件为第2步中的$search_where
+					select count(*) num from shop_user u,shop_user_details d where u.id = d.uid{$search_where};
+					/*
+					select count(*) num from shop_user u,shop_user_details d where u.id = d.uid and username='%admin%';
+					*/
+
+				2.修改第3步(分页操作)中查询所有用户信息的sql语句
+					添加where条件
+					$sql = "select u.id,...,d.gold... from shop_user u,shop_user_details d where u.id=d.uid{$search_where} limit {$pageOffset},{$pageSize}";
+
+					/*
+						select u.id,...,d.gold... from shop_user u,shop_user_details d where u.id=d.uid and username='%admin%' limit 0,5
+					*/
+				4.在第2步(搜索功能)的位置添加搜索连接，为了在点击上一页下一页的同时还保留着搜索条件
+					if(!empty($search)){
+						// 模糊搜索， 加 '' 加%%
+						$search_where = " and {$type}='%{$search}%'";
+						$search_url = "&type={$type}&search={$search}";
+					}
+
+				5.拼接上一页下一页的连接
+					首页 href="./show.php?page=1<?php echo $search_url?>"
+					尾页 href="./show.php?page=<?php echo $pageMax,$search_url;?>"
+					上一页 href="./show.php?page=<?php echo $pagePrev,$search_url;?>"
+					下一页 href="./show.php?page=<?php echo $pageNext,$search_url;?>"
+
+					/*
+						如果$search_url存在
+						上一页 href="./show.php?page=2&type=username&search=admin"
+						如果不存在，说明没有搜索
+						上一页 href="./show.php?page=2"
+					*/
+
+		5.禁用用户
+			a.禁用是一个超链接 链接地址是 ./doaction.php?act=lahei
+			b.需要知道禁用的是谁，所以需要在连接上传递一个能表名是这个用户的参数
+			c.完整的禁用连接是 ./doaction.php?act=lahei&id=$row['id']
+			d.点击禁用时，在doaction.php里匹配到lahei
+				1.接收id
+				2.拼接sql语句
+					update shop_user set status=0 where id=$id
+				3.执行sql，判断，如果更新失败，弹窗提示，并返回到show.php
+					如果更新成功，返回到show.php
+				4.show.php只显示正常用户，已禁用的用户在回收站显示
+					所以需要修改show.php中的所有sql语句中的where条件添加一个状态为1的条件
+					.... where ... and status=1 ...
+
+----- 查看用户界面暂时完成(除了修改) -----
+
+3.用户模块的回收站，./admin/user/recycle.php
+	这个页面显示所有被禁用的用户
+	所以直接复制show.php
+	并将这个页面中查询的where条件中status=1改为status=0
+	
+	还有将禁用改为启用，
+		启用的完整连接 ./doaction.php?act=start&id=$row['id']
+
+	点击启用，进入doaction.php进行处理
+		匹配到start
+		将doaction.php中的lahei中的代码复制过来
+		只需要将更新的sql语句中的status=0改为status=1
+			update shop_user set status=0 where id=$id
+				|
+			update shop_user set status=1 where id=$id
+
+		修改成功弹窗提示，并跳转到show.php或者recycle.php
+
+4.添加用户	./admin/user/add.php
+	添加一个用户其实就是一个注册的操作
+	1.首先是一个表单
+		提交地址 doaction.php?act=add
+		提交方式 post
+		需要添加用户头像 所以还要添加一个enctype="multipart/form-data"
+	2.后台添加用户时可以设置的信息包括
+		用户名，昵称，密码，性别，等级，头像，金币，邮箱
+	3.点击提交时，进入doaction.php进行处理
+		在doaction.php中匹配到add
+		a.接收并处理表单提交的信息
+		b.验证用户是否存在，先查询用户是否存在(select where username=$username)
+			如果存在，弹窗提示并返回到添加用户页面 ./add.php
+		c.如果不存在，表名用户名可用，进行下一步操作
+		d.不确定是否上传了头像，所以需要判断是否上传头像，判断方法是通过$_FILES['error'] 是否等于 4 。
+			如果没有上传头像，则不拼接userpic
+			插入用户表
+				$sql = 'insert into shop_user(username,userpwd,nickname) value(...)';
+			如果上传了头像，则引入函数库文件 ../../public/commen/functions.php
+				对上传的图片文件上传操作
+				$file = $_FILES['userpic'];	// 获取到上传图片的信息
+				$path = '../../public/uploads/';	// 给定保存路径
+				$allowType = array();	// 限制文件类型，默认为图片
+					function uploadFile($file,$path,$allowType){
+
+					}
+				调用这个文件上传函数
+				$info = uploadFile($file,$path,$allowType);
+
+				判断文件是否上传成功，如果不成功，提示错误信息，并返回到添加用户页面
+				如果成功，根据返回的文件名，拼接上路径，再调用图片缩放函数，处理成固定大小
+				if($info['error']){
+					// 说明上传成功，图片缩放
+					imageResize($path.$info['message'],$path,80,80,'');
+					// 添加userpic字段
+					
+				} else {
+					echo '<script>alert("头像上传失败，请重新添加")</script>';
+				}
+				
+				$sql = 'insert into shop_user(username,userpwd,nickname,userpic) value(...,$info['message'])';
+
+			执行sql，判断是否成功，如果不成功，弹窗提示注册失败，返回到添加用户页面
+			如果成功，获取当前插入的id，作为详情表的uid
+			插入用户详情表对应的信息
+				插入之前先判断Email是否存在，因为Email是一个唯一的值，如果存在，提示注册失败，返回错误信息
+				不存在则进行下一步''
+				$regtime = $lasttime = time();
+				$regip = $_SERVER['REMOTE_ADDR'];
+				$sql = 'insert into shop_user_details(gold,sex,email,regtime,lasttime,regip) value(...)'
+			执行sql，判断是否成功，如果插入详情表失败，通过id删除之前插入用户表中的那条记录，弹窗提示注册失败，返回到添加用户页面
+			如果插入成功，弹窗提示添加成功，返回到添加页面或者查看用户页面(注意，和前台注册的区别，这里添加用户不记录session，防止管理员掉线)
+
+5.修改用户 ./admin/user/edit.php
+	1.需要在show.php中为修改添加一个连接
+		完整连接 ./edit.php?id=$row['id']
+	2.点击show.php中的修改，跳转到修改当前用户的修改界面
+	3.需要获取需要修改的用户以前的信息。
+		a.获取需要修改的用户的id
+			$id = $_GET['id'];
+		b.拼接sql语句
+			select ... from shop_user u,shop_user_details d where u.id=$id and u.id=d.uid and u.status=1;
+		c.执行，并判断，获取结果集中的数据
+	4.表单中的内容，提交方式，提交地址，enctype
+		提交地址:./doaction.php?act=edit
+		不允许修改用户名，所以用户名设置成禁用 disabled
+		其它内容默认显示为查询出来的结果
+		头像，如果没有头像，则显示默认头像，如果有头像，则显示上传的头像
+		显示注册时间，最后登录时间，注册ip，这些不需要修改，只做显示
+
+	5.修改用户信息，点击提交，在doaction.php?act=edit中进行处理
+		1.先接受所有表单数据
+		2.判断是否上传了头像，如果上传了头像，则调用文件上传函数，和图片缩放函数，
+			如果没有上传头像，则直接更新其他数据，两次更新，更新用户表，更新详情表
+			每次更新都做判断，如果不成功弹窗提示，并返回到修改页面
+			具体跟添加用户思路一样
+----------------------------------
+用户模块完成
+----------------------------------
+
+============ 商品分类模块 =============
+商品分类
+	分类表  shop_types
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| id       | int(11)      | NO   | PRI | NULL    | auto_increment |
+| typename | varchar(50)  | NO   | UNI | NULL    |                |
+| pid      | int(11)      | NO   |     | NULL    |                |
+| path     | varchar(255) | NO   |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+
+规定
+	所有一级分类的父级id为0 					path 为 0,
+	所有二级分类的父级id为所属分类的一级分类id	path 为 0,pid,
+	所有三级分类的父级id为所属分类的二级分类id	path 为 0,pid1,pid 	// pid1为一级分类的id
+
+id	typename	pid		path
+1	家用电器	0       0,
+2   床上用品	0       0,
+3	汽车		0 		0,
+4 	电视		1 		0,1,
+5   SUV			3		0,3,
+6	奥迪		5 		0,3,5,
+
+1.添加分类 			./admin/type/add.php
+	a.这是一个表单
+		提交地址：./doaction.php?act=add 	// doaction.php在type下
+		提交方式：post
+		表单内容：
+			分类名 typename
+			父级ID	pid  下拉列表
+				默认选择根分类，即pid = 0
+				其它分类信息需要通过数据库查询出来
+					1.引入数据库配置连接文件
+					2.设置sql语句
+						查询所有的数据按照路径和id排序
+						mysql> select id,typename,path from shop_types order by concat(path,id);
+						+----+----------+--------+
+						| id | typename | path   |
+						+----+----------+--------+
+						|  1 | 家用电器 | 0,     |
+						| 10 | 洗衣机   | 0,1,   |
+						|  4 | 电视     | 0,1,   |
+						|  8 | TCL      | 0,1,4, |
+						|  7 | 冰箱     | 0,1,   |
+						|  2 | 床上用品 | 0,     |
+						|  9 | 床单     | 0,2,   |
+						|  3 | 汽车     | 0,     |
+						|  5 | SUV      | 0,3,   |
+						|  6 | 奥迪     | 0,3,5, |
+						+----+----------+--------+
+					3.执行查询并循环输出
+					先统计有几个逗号，一个逗号表示一级分类，两个表示二级分类。。。
+					$level = substr_count($path,',');
+					$space = str_repeat('&nbsp;&nbsp;',$level-1);
+					<option value="$id">$space.$typename</option>
+			// demo
+			<select name="pid">
+				<option value='0'>根分类</option>
+
+			// 1.引入数据库配置文件
+			include('../../public/common/config.php');
+			// 2.sql
+			$sql = 'select id,typename,path from shop_types order by concat(path,id)';
+			// 3.执行查询
+			$result = mysqli_query($link,$sql);
+			// 4.判断
+			if($result && mysqli_num_rows($result)>0){
+				while($row = mysqli_fetch_rows($result)){
+					$level = substr_count($row['path'],',');
+					$space = str_repeat('&nbsp;&nbsp;',$level-1);
+					echo "<option value="$id">$space.$row['typename']</option>";
+				}
+			}
+
+			</select>
+
+2.添加分类处理 ./admin/type/doaction.php
+	匹配到add
+	接收表单数据
+	检测分类名称是否已经存在(unique)
+		如果存在，则提示并返回
+		如果不存在则进行下一步
+	对pid进行判断，如果pid为0
+		则拼接path为0,
+	如果pid不为0，
+		则从数据库中跟据pid查询上级分类的path，然后拼接path为父级path.$pid.','
+
+	执行添加分类
+
+3.分类信息修改 ./admin/type/edit.php
+	获取要修改的id
+	通过id获取分类信息
+	提交到./doaction.php?act=edit
+
+4.分类信息修改处理
+	获取id，pid，typename
+	检测id和pid是否相同，自己不能是自己的子类
+		如果两者一样，直接提示，并重新修改
+	查看typename是否可用
+		不可用，提示并返回重新修改
+		可用，进行下一步
+	设置path，和添加分类步骤一样
+	更新操作
+	全部都更新
+
+5.分类信息删除处理 href="./doaction.php?act=del&id={$id}"
+	需要注意，只能删除空的分类(即如果分类下面有子分类，则不能删除)
+	接收id
+	查找所有pid=id的记录，如果能查到，则证明该分类存在子分类，不能删除
+	如果查不到，则删除记录
+----------------------------------
+分类模块完成
+----------------------------------
+
+============ 商品模块 =============
+1.商品查看 ./admin/goods.php
+	查看所有商品，搜索+分页
+2.添加商品 ./admin/goods/add.php
+	提交地址 ./doaction.php?act=add
+	提交方式 post
+	上传文件类型 enctype="multipart/form-data"
+
+3.添加商品操作 ./doaction.php?act=add
+	1.接收表单数据
+	2.如果没有上传商品图片，则提示上传商品图片
+		如果上传了图片，则进行图片缩放，两张，一张大图，一张小图
+	3.拼接sql语句并插入商品表
+	4.检测是否添加成功
+		如果添加成功，提示并跳转
+		如果没有添加成功，删除生成的大图和小图，弹窗提示并重新添加
+4.商品下架
+	详细步骤和用户禁用差不多
+	查看商品页面添加下架链接，href="./goods/doaction.php?act=off&id=$id"
+5.下架处理
+	接收id，拼接sql语句，修改状态为0
+	执行sql
+6.商品回收站管理 ./admin/goods/recycle.php
+	1.和商品查看页面一样，只需要修改查询的状态为0即可
+	2.修改下架为上架
+
+7.商品上架
+	详细步骤和用户启用差不多
+	查看商品页面添加上架链接，href="./doaction.php?act=on&id=$id"
+8.上架处理
+	接收id，拼接sql语句，修改状态为1
+	执行sql
+
+9.商品修改 ./admin/goods/edit.php
+	获取id，
+	通过id获取商品信息
+	提交到 ./doaction.php?act=edit
+10.商品修改操作 ./doaction.php?act=edit
+	1.接收表单数据
+	2.判断是否上传图片，如果没有上传图片，使用原有图片，不更新goodspic
+	如果上传图片，对上传图片进行两次缩放
+	3.拼接sql语句，并更新
+
+------------------------------------------
+后台暂时结束，开始修改前台页面
+------------------------------------------
+
+前台首页修改 ./index.php
+------------------------------------
+1.修改导航链接
+	导航条连接为一级分类，连接地址为./goodslist.php?id=$id
+2.修改所有分类显示
+	三级分类
+	三层while循环，第一层查询pid为0；
+	第二层查询pid为第一层的id
+	第三层查询pid为第二层的id
+3.增加商品展示
+	推荐商品处，按照时间查询4条，并且状态为1的
+	循环输出
+4.商品列表处
+	查询状态为1的商品
+
+商品列表页修改 ./goodslist.php
+--------------------------------------
+1.查询出来所有状态为1的商品，并在中间列表处显示
+2.查询4条商品作为推广商品
+
+商品详情页面修改 ./goodsdetails.php
+-----------------------------------------
+1.根据id查询商品
+	输出到相应的位置
+2.设置当前位置
+	./public/common/pos.php
+	使用方法
+	<!-- 当前位置 -->
+	<div class="position">
+		<?php
+			include('./public/common/pos.php');
+			$tid = getTid($id,$link);
+			$tree = getTree($tid,$link);
+			getPos($tree);
+			echo '>'.$row['goodsname'];
+		?>
+	</div>
+3.加入购物车
+	将加入购物车设置成一个form表单，提交到./doaction.php?act=shopcar
+
+4.处理加入购物车操作
+	1.接收传递过来的id,goodsname,goodsprice,goodsnum
+	2.根据id设置session
+	3.判断session id是否存在，如果存在，则session id中的num++
+		如果不存在，则设置session id
+	4.添加成功并跳转
+5.查看购物车页面 ./shopcar.php
+	遍历所有的购物车中的商品
+	增加数量减一的操作 ./doaction.php?act=jiancar
+	增加数量加一的操作 ./doaction.php?act=jiacar
+	增加商品移除购物车的操作 ./doaction.php?act=delcar
+
+6.处理购物车操作 
+	1.数量减一 jiancar
+		1.获取id
+		2.判断 $_SESSION['shopcar'][$id][num] 是否大于1
+			如果大于1，则执行num--
+			如果为1，则不执行操作
+	2.数量加一 jiacar
+		1.获取id
+		2.执行$_SESSION['shopcar'][$id]['num']++
+	3.商品移除购物车 delcar
+		1.获取id
+		2.删除$_SESSION['shopcar'][$id]
+
+========== 订单处理 ======== 
+1.购物车结算
+    点击结算，提交购物车信息
+    ./user/doaction.php?act=order
+2.处理结算
+    ./user/doaction.php?act=order
+    1.获取用户id
+    2.遍历接收商品id，并根据id进行库存查询，如果库存不足，则提醒并退出
+    如果库存满足，则进行下一步
+    3.设置随机订单号，接收商品数量
+    4.执行插入
+    5.插入订单表成功，则插入订单状态表，
+        如果订单状态表插入成功，则销毁当前商品的购物车信息，跳转到订单详情页
+        如果订单状态表插入失败，则删除刚插入的商品订单记录
+    6.插入失败，提示并退出
+
+-------------------------
+前台订单处理完成，进入后台设置订单管理
+-------------------------
+后台订单管理 ./admin/order.php
+=========================
+1.显示所有未发货的订单
+    通过联表查询订单id，订单编号，gid,uid，status,username,goodsname
+    设置发货，和取消订单的按钮
+2.发货 ./order/doaction.php?act=deliver&sid={$row['sid']}
+    sid 是 s.id 通过查询订单状态表获取的id
+3.取消订单，./order/doaction.php?act=cancel&sid=$row['sid'];
+
+4.处理订单操作    ./order/doaction.php
+    1.发货，通过sid来更新状态为1
+    2.取消订单，通过sid来更新状态为5(老师没有说要写这个)
+
+5.未确认订单管理 ./order/wei.php
+    显示已发货但是未确认收货的订单
+    查询状态为1的订单
+6.已确认订单管理 ./order/ok.php
+    显示以确认收货的订单
+    查询状态为2的订单
+7.退换货订单管理 ./order/tuihuan.php
+    显示退货和换货的订单
+    查询状态为3或者4的订单
+    操作：
+        判断是退货还是换货，
+        退货显示确认退货和取消退货
+            确认退货 ./doaction.php?act=oktui
+                返还金币
+            取消退货 ./doaction.php?act=notui
+                将status改为2
+        换货显示确认换货和取消换货
+            确认换货 ./doaction.php?act=okhuan
+                将status改为1
+            取消换货 ./doaction.php?act=nohuan
+                将status改为2
+
+-------------------------
+
+用户个人中心修改 ./ucenter.php
+============================
+1.基本信息修改	./ucenter.php
+	
+
