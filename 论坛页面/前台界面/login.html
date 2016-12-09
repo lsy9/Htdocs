@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>LAMP兄弟连-登陆页</title>
+		<style>
+		/*========top的css样式设计代码=========*/
+			*{
+				margin:0px;
+				padding:0px;
+			}
+			body{
+				background-color:#F1F2F6;
+			}
+			a{
+				text-decoration:none;
+			}
+			#top{
+				width:100%;
+				height:27px;
+				border-bottom:1px solid white;
+				background-color:#E6E9EE;
+				line-height:27px;
+			}
+			.middlediv{
+				margin:0 auto;
+				width:950px;
+			}
+			#leftnav{
+				list-style:none;
+			}
+			#leftnav li a{
+				float:left;
+				font-size:13px;
+				margin-left:5px;
+				color:#636969;
+				text-decoration:none;
+			}
+			#leftnav li a:hover{
+				color:blue;
+			}
+			#rightnav{
+				list-style:none;
+			}
+			#rightnav li a{
+				float:right;
+				font-size:13px;
+				margin-left:5px;
+				color:#636969;
+				text-decoration:none;
+			}
+			#rightnav li a:hover{
+				color:blue;
+			}
+		/*====================================*/
+		
+		/*==========header的css代码===========*/
+			#header{
+				width:950px;
+				height:80px;
+				background-color:#F1F2F6;
+				margin:0 auto;
+			}
+			#logo{
+				width:300px;
+				height:80px;
+				float:left;
+				line-height:80px;
+				margin-top:;
+			}
+			#nobrother{
+				width:300px;
+				height:80px;
+				float:left;
+				line-height:80px;
+			}
+			#login{
+				width:350px;
+				float:left;
+				font-size:15px;
+				margin-top:20px;
+				line-height:25px;
+			}
+			#login table{
+				width:330px;
+			}
+			#login table input[type=submit]{
+				width:70px;
+				height:22px;
+				cursor:pointer;
+			}
+			#login table input[type=button]{
+				width:68px;
+				height:22px;
+				background-color:#fc0;
+				border:2px solid #fc0;
+				color:white;
+				cursor:pointer;
+				box-shadow:1px 2px #ccc;
+			}
+		/*====================================*/
+		
+		/*============nav的css样式============*/
+			#nav{
+				width:100%;
+				height:45px;
+				background-color:#075992;
+				line-height:45px;
+				font-size:15px;
+				color:white;
+				/*1170B2*/
+			}
+			#middlenav li{
+				float:left;
+				list-style:none;
+				padding:0px 10px 0px 10px;
+			}
+			#middlenav li a{
+				color:white;
+			}
+			#middlenav li a:hover{
+				color:yellow;
+			}
+			#middlenav .point li{
+				background-color:#1170B2;
+			}
+			#fastroad{
+				float:right;
+				margin-top:5px;
+			}
+		/*====================================*/
+		
+		/*==========大盒子的css样式===========*/
+			#big{
+				width:950px;
+				margin:0 auto;
+			}
+			.btfont{
+				width:930px;
+				height:50px;
+				float:left;
+				line-height:50px;
+				border-radius:5px;
+				background-color:white;
+				color:#636969;
+				font-size:15px;
+				padding-left:20px;
+				border-bottom:1px solid #ccc;
+			}
+			.biaodan{
+				width:800px;
+				height:400px;
+				float:left;
+				background-color:white;
+				border-radius:5px;
+				border-right:1px solid #ccc;
+				/*border:1px solid red;*/
+			}
+			.biaodan .tishi{
+				margin:15px;
+				/*border:1px solid red;*/
+			}
+			.biaodan .tishi p{
+				padding:5px;
+				font-size:13px;
+				background-color:#fffae2;
+			}
+			.biaodan table{
+				margin-left:180px;
+			}
+			.biaodan table tr td.you{
+				text-align:right;
+				font-size:15px;
+				/*border:1px solid #ccc;*/
+			}
+			.biaodan table tr td.you span{
+				color:red;
+			}
+			.biaodan table tr td.zuo input{
+				text-align:left;
+				width:250px;
+				height:30px;
+			}
+			.biaodan table tr td.btn input{
+				width:50px;
+				height:30px;
+			}
+			.butdl{
+				width:149px;
+				height:400px;
+				float:left;
+				border-radius:5px;
+				background-color:white;
+			}
+			.butdl h3{
+				color:red;
+				margin:10px;
+				font-size:15px;
+			}
+			.butdl button{
+				margin-left:11px;
+				width:70px;
+				height:30px;
+			}
+			
+		/*====================================*/
+		
+		/*===========clear的css样式===========*/
+			#clear{
+				clear:both;
+			}
+		/*====================================*/
+		
+		/*==========footer的css样式===========*/
+			#footer{
+				width:950px;
+				height:70px;
+				text-align:center;
+				padding-top:20px;
+				margin:0 auto;
+			}
+			#footer p{
+				font-size:13px;
+				line-height:18px;
+				color:#636969;
+				margin-bottom:20px;
+			}
+		/*=============footer结束=============*/
+		</style>
+	</head>
+	<body>
+		<!--顶部条-->
+		<div id="top">
+			<div class="middlediv">
+				<ul id="leftnav">
+					<li><a href="#">设为首页</a></li>
+					<li><a href="#">收藏LAMP兄弟连</a></li>
+				</ul>
+				<ul id="rightnav">
+					<li><a href="#">|帮助</a></li>
+					<li><a href="#">推广链接</a></li>
+					<li><a href="#">社区应用</a></li>
+					<li><a href="#">最新帖子</a></li>
+					<li><a href="#">精华区</a></li>
+					<li><a href="#">社区服务</a></li>
+					<li><a href="#">会员列表</a></li>
+					<li><a href="#">统计排行</a></li>
+					<li><a href="#">搜索</a></li>
+				</ul>
+			</div>
+		</div>
+		<!--顶部条结束-->
+		
+		<!--header头-->
+		<div id="header">
+			<div id="logo">
+				<img src="./public/logo.jpg"/>
+			</div>
+			<div id="nobrother">
+				<img src="./public/nobrother.jpg"/>
+			</div>
+			<div id="login">
+				<form action="action.php" method="post">
+					<table>
+						<tr>
+							<td><input type="text" name="uname" placeholder="输入用户名"/></td>
+							<td><input type="checkbox" name=""/>记住密码</td>
+							<td><a href="#"/>找回密码</a></td>
+						</tr>
+						<tr>
+							<td><input type="password" name="upass" placeholder=""/></td>
+							<td><input type="submit" value="登陆"/></td>
+							<td><a href="#"><input type="button" value="注册"/></a></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+		<!--header头结束-->
+		
+		<!--导航条-->
+		<div id="nav">
+			<div class="middlediv">
+				<ul id="middlenav">
+					<li><a href="#">培训课程</a></li>
+					<span class="point"><li><a href="#">论坛</a></li></span>
+					<li><a href="#">兄弟连云课堂</a></li>
+					<li><a href="#">PHP视频</a></li>
+					<li><a href="#">Linux视频</a></li>
+					<li><a href="#">战地日记</a></li>
+				</ul>
+				<div id="fastroad">
+					<a href="#"><img src="./public/fastroad.jpg"/></a>
+				</div>
+			</div>
+		</div>
+		<!--导航条结束-->
+		
+		<!--大盒子-->
+		<div id="big">
+			<div class="btfont">
+				<h3>注册</h3>
+			</div>
+			<div class="biaodan">
+				<div class="tishi">
+					<p>错误次数不得超过五次，否则会被锁定！</p>
+				</div>
+				<form action="#" method="post">
+					<table width="380" border="0" cellspacing="15">
+						<tr>
+							<td class="you">用户名<span> *</span></td>
+							<td class="zuo"><input type="text" name=""/></td>
+						</tr>
+						<tr>
+							<td class="you">密  码<span> *</span></td>
+							<td class="zuo"><input type="password" name=""/></td>
+						</tr>
+						<tr style="text-align:center;">
+							<td class="btn" colspan="2">
+								<input type="submit" value="登陆"/>
+								<input type="reset" value="重置"/>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			<div class="butdl">
+				<h3>还没有账号？</h3>
+				<a href="#"><button>去注册</button></a>
+			</div>
+		</div>
+		<div id="clear"></div>
+		<!--大盒子结束-->
+			
+		<!--页面尾开始-->
+		<div id="footer">
+			<center>
+				<p>
+					联系我们|无图版|手机浏览|清除Cookies<br/>
+					Powered by phpwind v8.7 Certificate Copyright Time now is:02-17 19:40 <br/>
+					©2006 - 2015 LAMP兄弟连 版权所有 Gzip disabled 京ICP备11018177号 Total 0.072194(s) query 3,<img src="./public/pic.gif"/>京公网安备11011402000177
+				</p>
+			</center>
+		</div>
+		<!--页面尾结束-->
+	</body>
+</html>
